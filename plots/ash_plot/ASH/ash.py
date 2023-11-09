@@ -74,7 +74,7 @@ class ash:
     
     def bins_from_bw(self):
         self.bin_width = self.bw * np.sqrt(2*np.pi) #bin with full width half max of band width
-        self.bin_num = np.ceil(((self.data_max - self.data_min)/self.bin_width))
+        self.bin_num = int(np.ceil(((self.data_max - self.data_min)/self.bin_width)))
         self.MIN = self.data_min - self.bin_width
         self.MAX = self.data_min + self.bin_width*(self.bin_num + 1)
         self.SHIFT = self.bin_width/self.shift_num
@@ -90,7 +90,7 @@ class ash:
         self.ash_den = np.zeros_like(self.ash_mesh)
         for i in range(self.shift_num):
             hist_range = (self.MIN+i*self.SHIFT,self.MAX+i*self.SHIFT- self.bin_width)
-            hist, self.bin_edges = np.histogram(self.data,self.bin_num+1,range=hist_range,normed=normed)
+            hist, self.bin_edges = np.histogram(self.data,self.bin_num+1,range=hist_range,density=normed)
             #print(self.bin_edges[1]-self.bin_edges[0])
             hist_mesh = np.ravel(np.meshgrid(hist,np.zeros(self.shift_num))[0],order='F')
             self.ash_den = self.ash_den + np.r_[[0]*i,hist_mesh,[0]*(self.shift_num-i)] #pad hist_mesh with zeros and add
@@ -119,24 +119,25 @@ class ash:
     def plot_ash_infill(self, ax=None, color='#92B2E7', normed=True, alpha=0.75):
         ax = ax if ax else plt.gca()
         fig_tmp = plt.figure(figsize = (6,6))
-        ax_tmp = fig_tmp.add_axes([0,0,1,1], axisbg='w', frameon=False)
-        ax_tmp.set_xticks([])
-        ax_tmp.set_yticks([])
+        # ax = fig_tmp.add_axes([0,0,1,1], facecolor='g', frameon=False)
+        # ax.set_xticks([])
+        # ax.set_yticks([])
         self.hist_max = 0
+        print("SHIFT:", self.SHIFT)
         for i in range(self.shift_num):
             hist_range = (self.MIN+i*self.SHIFT,self.MAX+i*self.SHIFT- self.bin_width)
             self.hist_range = hist_range
-            hist, bin_edges = np.histogram(self.data,self.bin_num+1,range=hist_range,normed=normed)
+            hist, bin_edges = np.histogram(self.data,self.bin_num+1,range=hist_range,density=normed)
             self.hist_max = max(hist) if max(hist) > self.hist_max else self.hist_max
             #gbar(ax, bin_edges[:-1], hist, width=self.bin_width,alpha=0.5/self.shift_num)
-            n, bin_edges, patches = ax_tmp.hist(self.data,self.bin_num+1,range=hist_range,
-                histtype='stepfilled',alpha=alpha/self.shift_num,color = color, linewidth=0,normed=normed, rasterized=True)
+            n, bin_edges, patches = ax.hist(self.data,self.bin_num+1,range=hist_range,
+                histtype='stepfilled',alpha=alpha/self.shift_num,color = color, linewidth=0,density=normed, rasterized=True)
         ymin, ymax = ax.get_ylim()
         xmin, xmax = ax.get_xlim()
         self.hist_max += self.hist_max*0.1
         ymax = ymax if ymax > self.hist_max else self.hist_max
-        ax_tmp.set_ylim(ymin, ymax)
-        ax_tmp.set_xlim(xmin, xmax)
+        ax.set_ylim(ymin, ymax)
+        ax.set_xlim(xmin, xmax)
         fig_tmp.canvas.draw()
         with tempfile.NamedTemporaryFile() as fp:
             plt.savefig(fp, transparent=True, type='png')
@@ -249,5 +250,5 @@ if __name__ == "__main__":
     ax.yaxis.set_ticks([])
     
     plt.tight_layout()
-    plt.show()
+    # plt.show()
     

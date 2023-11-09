@@ -1,0 +1,8 @@
+bottle
+wtforms
+numpy == 1.23
+pandas
+matplotlib == 3.4
+seaborn
+uncertainties
+scipy

@@ -170,7 +170,7 @@ def ce_plot(x_data, y_data, ax=None, linthresh=0.1, **kwargs):
         plt.plot(x_data, y_data-100, **kwargs)
     else:
         ax.plot(x_data, y_data-100, **kwargs)
-    plt.yscale('symlog', linthreshy=linthresh)
+    plt.yscale('symlog', linthresh=linthresh)
     plt.gca().get_yaxis().set_minor_locator(MinorSymLogLocator(linthresh))
     plt.tick_params(axis='y', which='minor')
     loc, labels = plt.yticks()
