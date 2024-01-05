@@ -1,5 +1,7 @@
 # bottle-plotter
-The code for the buriak group data plotter
+The code for the buriak group data plotter. I am not the original creator of this app, the original was hosted at https://github.com/bcolsen/bottle-plotter. I migrated it to python 3.
+
+Currently hosted at https://ashsi.chem.ualberta.ca/
 
 ## dependencies
 - python 3.5+
@@ -10,9 +12,6 @@ The code for the buriak group data plotter
 - matplotlib
 - seaborn
 - uncertainties
-
-See it in action at:
-https://maverick.chem.ualberta.ca/plot/ash
 
 # Run it!
 Tested most recently on python 3.8

@@ -24,6 +24,4 @@
         </div>
     </div>
 </div>
-
-    
-
+<footer> <a href="https://github.com/SamLojpur/bottle-plotter"> https://github.com/SamLojpur/bottle-plotter </a> </footer>
